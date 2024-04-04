@@ -13,6 +13,10 @@ struct LeetArgs {
     #[arg(short, long)]
     destination: Option<String>,
 
+    /// Apply leet transformations to capital letters
+    #[arg(short, long)]
+    capitals: bool,    
+
     /// Enable extra leet characters beyond the basic ones
     #[arg(short, long)]
     extras: bool,
@@ -61,18 +65,18 @@ fn main() {
     };
 
     let output = input.chars()
-        .map(|c| match (c, args.extras) {
-            ('o', _) => '0',
-            ('l', _) => '1',
-            ('z', true) => '2',
-            ('e', _) => '3',
-            ('a', _) => '4',
-            ('s', _) => '5',
-            ('g', true) => '6',
-            ('t', _) => '7',
-            ('b', _) => '8',
-            ('j', true) => '9',
-            ('i', true) => '!',
+        .map(|c| match (c, args.extras, args.capitals) {
+            ('o', _, _) | ('O', _, true) => '0',
+            ('l', _, _) | ('L', _, true) => '1',
+            ('z', true, _) | ('Z', true, true) => '2',
+            ('e', _, _) | ('E', _, true) => '3',
+            ('a', _, _) | ('A', _, true) => '4',
+            ('s', _, _) | ('S', _, true) => '5',
+            ('g', true, _) | ('G', true, true) => '6',
+            ('t', _, _) | ('T', _, true) => '7',
+            ('b', _, _) | ('B', _, true) => '8',
+            ('j', true, _) | ('J', true, true) => '9',
+            ('i', true, _) | ('I', true, true) => '!',
             _ => c,
         })
         .collect::<String>();
